@@ -18,7 +18,7 @@ pipeline {
               echo "Running Ansible playbook on Cisco NX-OS"
               script {
                     try {
-                      sh "ansible-playbook nx-vlan.yaml --extra-vars "ansible_user=admin ansible_password=C!sco123 expected_check_status=PASS"
+                      sh 'ansible-playbook nx-vlan.yaml --extra-vars "ansible_user=admin ansible_password=C!sco123 expected_check_status=PASS"'
                     } catch (error) {
                     error("Ansible Playbook failed!!!")
                     }
