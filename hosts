@@ -1,27 +1,13 @@
-localhost
+#   - Comments begin with the '#' character
+#   - Blank lines are ignored
+#   - Groups of hosts are delimited by [header] elements
+#   - You can enter hostnames or ip addresses
+#   - A hostname/ip can be a member of multiple groups
 
-[ios-xe]
-172.26.249.160
-172.26.249.161
-172.26.249.162
-172.26.249.163
-172.26.249.164
-172.26.249.166
-172.26.249.169
-172.26.249.151
-172.26.249.152
-172.26.249.153
-172.26.249.154
-172.26.249.159
+#
+# group variables
+#
+[all:vars]
 
-[nxos]
-n9k ansible_host=172.26.249.172
-n9k ansible_host=172.26.249.172
-
-[cisco]
-n9k ansible_host=192.168.2.3
-n9k2 ansible_host=192.168.2.3
-n9k3 ansible_host=192.168.2.3
-n9k4 ansible_host=192.168.2.3
-n9k5 ansible_host=192.168.2.3
-n9k6 ansible_host=192.168.2.3
+[prod]
+10.128.1.135

@@ -1,0 +1,22 @@
+- name: Ensure VLANs are configured correctly
+  hosts: localhost
+  vars:
+    expected_check_status: PASS  # Default status for the test (after change)
+  tasks:
+    - name: Ensure a recent snapshot is available, and has the desired freshness
+      forward_snapshot:
+        freshness: "{{ freshness }}"
+        mock_snapshot:
+          name: "{{ snapshot_name }}"
+          path: "{{ snapshot_path }}"
+      register: snapshot_output
+
+    - name: Ensure the VLAN existence check is present, and has the expected value
+      forward_check:
+        state: Present
+        type: "vlan_existence"
+        data:
+          vlans:
+            - 50
+      register: check_output
+      failed_when: check_output.result.status != expected_check_status
