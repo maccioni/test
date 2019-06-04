@@ -2,15 +2,15 @@ pipeline {
     agent any
 
     stages {
-        stage('Check enviroment') {
+        stage('Update code from GitHub') {
             steps {
-              echo "Check running user"
+              echo "Check enviroment "
               sh "whoami"
               sh "who am i"
-              echo "Check local directory"
               sh "ls -l"
-              echo "Check enviroment variables"
               sh "env"
+              echo "Pull code from GitHub"
+              sh 'git pull origin master'
             }
         }
         stage('Configure VLANs on Cisco NX-OS') {
