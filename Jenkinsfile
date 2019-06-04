@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Stage 1: check enviroment') {
+        stage('Check enviroment') {
             steps {
               echo "Check running user"
               sh "whoami"
@@ -13,30 +13,12 @@ pipeline {
               sh "env"
             }
         }
-        stage('Stage 2: Verify before pushing changes to Production') {
+        stage('Configure VLANs on Cisco NX-OS') {
             steps {
-              echo "Running Ansible playbook with Before snapshot"
+              echo "Running Ansible playbook on Cisco NX-OS"
               script {
                     try {
-                      sh "ansible-playbook fwd-ansible/test_esx_traffic.yml --extra-vars=@fwd-ansible/deployments/test-snapshots-before.yml --extra-vars=expected_check_status=FAIL"
-                    } catch (error) {
-                    error("Ansible Playbook failed!!!")
-                    }
-                }
-            }
-        }
-        stage('Stage 3: Pushing changes to production' ) {
-            steps {
-              echo "Sleeping for a while..."
-              sh "sleep 120"
-            }
-        }
-        stage('Stage 4: Verify after the changes have been pushed to Production') {
-            steps {
-              echo "Running Ansible playbook with After snapshot"
-              script {
-                    try {
-                      sh "ansible-playbook fwd-ansible/test_esx_traffic.yml --extra-vars=@fwd-ansible/deployments/test-snapshots-after.yml --extra-vars=expected_check_status=PASS"
+                      sh "ansible-playbook nx-vlan.yaml --extra-vars "ansible_user=admin ansible_password=C!sco123 expected_check_status=PASS"
                     } catch (error) {
                     error("Ansible Playbook failed!!!")
                     }
