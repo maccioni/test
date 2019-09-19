@@ -2,22 +2,40 @@ pipeline {
     agent any
 
     stages {
-        stage('Stage 1') {
+        stage('Initial Stage') {
+          steps {
+              echo "Check enviroment "
+              sh "env"
+            }
+        }
+        stage("Gather Deployment Parameters") {
+            steps {
+                timeout(time: 30, unit: 'SECONDS') {
+                    script {
+                        // Show the select input modal
+                       def INPUT_PARAMS = input message: 'Please Provide Parameters', ok: 'Next',
+                                        parameters: [
+                                        choice(name: 'ENVIRONMENT', choices: ['dev','qa'].join('\n'), description: 'Please select the Environment'),
+                                        choice(name: 'IMAGE_TAG', choices: getDockerImages(), description: 'Available Docker Images')]
+                        env.ENVIRONMENT = INPUT_PARAMS.ENVIRONMENT
+                        env.IMAGE_TAG = INPUT_PARAMS.IMAGE_TAG
+                    }
+                }
+            }
+        }
+        stage("Use Deployment Parameters") {
+         steps {
+                script {
+                    echo "All parameters have been set as Environment Variables"
+                    echo "Selected Environment: ${env.ENVIRONMENT}"
+                    echo "Selected Tag: ${env.IMAGE_TAG}"
+                    }
+                }
+        }
+        stage('Final Stage') {
             steps {
               echo "Check enviroment "
               sh "env"
-              echo "Get input"
-              input message: 'Continue to the next stage?'
-            }
-        }
-        stage('Stage 2') {
-            steps {
-              echo "Running Stage 2"
-            }
-        }
-        stage('Stage 3') {
-            steps {
-              echo "Running Stage 3"
             }
         }
     }
