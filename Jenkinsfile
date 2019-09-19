@@ -1,30 +1,24 @@
 pipeline {
-  agent any
-  stages {
-    stage('Update code from GitHub') {
-      steps {
-        echo 'Check enviroment '
-        sh 'whoami'
-        sh 'who am i'
-        sh 'ls -l'
-        sh 'env'
-        echo 'Pull code from GitHub'
-        sh 'git pull origin master'
-        slackSend(channel: 'demo-notifications', message: 'test message from jenkins', username: 'fabriziomaccioni', token: 'GnbPV5e2SVkTkyMiRXaCFEXK', teamDomain: 'fwd-net')
-      }
-    }
-    stage('Configure VLANs on Cisco NX-OS') {
-      steps {
-        echo 'Running Ansible playbook on Cisco NX-OS'
-        script {
-          try {
-            sh 'ansible-playbook nx-vlan.yaml --extra-vars "ansible_user=admin ansible_password=C!sco123 expected_check_status=PASS"'
-          } catch (error) {
-            error("Ansible Playbook failed!!!")
-          }
-        }
+    agent any
 
-      }
+    stages {
+        stage('Stage 1') {
+            steps {
+              echo "Check enviroment "
+              sh "env"
+              echo "Get input"
+              input message: 'Continue to the next stage?'
+            }
+        }
+        stage('Stage 2') {
+            steps {
+              echo "Running Stage 2"
+            }
+        }
+        stage('Stage 3') {
+            steps {
+              echo "Running Stage 3"
+            }
+        }
     }
-  }
 }
